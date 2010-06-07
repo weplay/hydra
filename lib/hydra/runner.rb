@@ -21,8 +21,12 @@ module Hydra #:nodoc:
       $stdout.sync = true
 
       trace 'Creating test database'
-      ENV['TEST_ENV_NUMBER'] = Process.pid.to_s
-      Rake::Task['db:reset'].invoke
+      ENV['TEST_ENV_NUMBER'] = "hydra_#{Process.pid}"
+
+      schema_file = Rails.root.join('db','development_structure.sql')
+      `/usr/local/mysql/bin/mysql -u root -f -e 'drop database if exists #{ENV['TEST_ENV_NUMBER']}'`
+      `/usr/local/mysql/bin/mysqladmin -u root create #{ENV['TEST_ENV_NUMBER']}`
+      `/usr/local/mysql/bin/mysql -u root #{ENV['TEST_ENV_NUMBER']} < #{schema_file}`
 
       trace 'Booted. Sending Request for file'
 
@@ -59,8 +63,8 @@ module Hydra #:nodoc:
     # Stop running
     def stop
       trace 'Dropping test database'
-      ENV['TEST_ENV_NUMBER'] = Process.pid.to_s
-      Rake::Task['db:drop'].invoke
+      ENV['TEST_ENV_NUMBER'] = "hydra_#{Process.pid}"
+      `/usr/local/mysql/bin/mysqladmin -u root -f drop #{ENV['TEST_ENV_NUMBER']}`
 
       @running = false
     end
