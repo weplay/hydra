@@ -1,10 +1,23 @@
-module Hydra #:nodoc: 
+module Hydra #:nodoc:
   module Messages #:nodoc:
     module Worker #:nodoc:
       # Message indicating that a worker needs a file to delegate to a runner
       class RequestFile < Hydra::Message
         def handle(master, worker) #:nodoc:
           master.send_file(worker)
+        end
+      end
+
+      # Message telling the runner to create database.
+      class CreateDatabase < Hydra::Message
+        def handle(runner) #:nodoc:
+          puts "CreateDatabase received in #{Process.pid}"
+          ENV['TEST_ENV_NUMBER'] = "hydra_#{Process.pid}"
+
+          schema_file = Rails.root.join('db','development_structure.sql')
+          `/usr/local/mysql/bin/mysql -u root -f -e 'drop database if exists #{ENV['TEST_ENV_NUMBER']}'`
+          `/usr/local/mysql/bin/mysqladmin -u root create #{ENV['TEST_ENV_NUMBER']}`
+          `/usr/local/mysql/bin/mysql -u root #{ENV['TEST_ENV_NUMBER']} < #{schema_file}`
         end
       end
 

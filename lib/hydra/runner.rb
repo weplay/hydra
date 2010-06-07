@@ -20,14 +20,6 @@ module Hydra #:nodoc:
       @verbose = opts.fetch(:verbose) { false }
       $stdout.sync = true
 
-      trace 'Creating test database'
-      ENV['TEST_ENV_NUMBER'] = "hydra_#{Process.pid}"
-
-      schema_file = Rails.root.join('db','development_structure.sql')
-      `/usr/local/mysql/bin/mysql -u root -f -e 'drop database if exists #{ENV['TEST_ENV_NUMBER']}'`
-      `/usr/local/mysql/bin/mysqladmin -u root create #{ENV['TEST_ENV_NUMBER']}`
-      `/usr/local/mysql/bin/mysql -u root #{ENV['TEST_ENV_NUMBER']} < #{schema_file}`
-
       trace 'Booted. Sending Request for file'
 
       @io.write RequestFile.new

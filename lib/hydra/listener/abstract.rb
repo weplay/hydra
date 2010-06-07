@@ -10,6 +10,7 @@ module Hydra #:nodoc:
       def initialize(output = $stdout)
         @output = output
       end
+      
       # Fired when testing has started
       def testing_begin(files)
       end

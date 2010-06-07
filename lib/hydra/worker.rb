@@ -73,6 +73,7 @@ module Hydra #:nodoc:
           Hydra::Runner.new(:io => pipe, :verbose => @verbose)
         end
         pipe.identify_as_parent
+        pipe.write Hydra::Messages::Worker::CreateDatabase.new
         @runners << { :pid => child, :io => pipe, :idle => false }
       end
       trace "#{@runners.size} Runners booted"
