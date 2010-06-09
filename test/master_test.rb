@@ -88,8 +88,7 @@ class MasterTest < Test::Unit::TestCase
           :connect => 'localhost',
           :directory => File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')),
           :runners => 1 
-        }],
-        :verbose => true
+        }]
       )
       assert File.exists?(target_file)
       assert_equal "HYDRA", File.read(target_file)
