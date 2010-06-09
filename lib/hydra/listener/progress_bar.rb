@@ -13,6 +13,11 @@ module Hydra #:nodoc:
 
       # Increment completed files count and update bar
       def file_end(file, output)
+        # TODO: Where does this belong?
+        if output =~ /pending steps/
+          output = '.'
+        end
+        
         unless output == '.'
           @output.write "\r#{' '*60}\r#{output}\n"
           @errors = true
