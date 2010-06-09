@@ -18,7 +18,7 @@ module Hydra #:nodoc:
       def trace(str)
         $stdout.write "#{Time.now.to_f} #{self.class._traceable_prefix}| #{str}\n" if @verbose
         @logger ||= Logger.new('/tmp/hydra.log')
-        @logger.info "#{Time.now.to_f} #{self.class._traceable_prefix}| #{str}\n"
+        @logger.info "#{Time.now.to_f} #{self.class._traceable_prefix}| #{str}"
       end
     end
   end
